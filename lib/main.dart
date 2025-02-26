@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart'; // Import FilePicker
+import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:animations/animations.dart';
 import 'package:lottie/lottie.dart';
@@ -64,19 +64,17 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.any, // ✅ Allow all file types
+      type: FileType.any,
     );
 
     if (result != null) {
       String? filePath = result.files.single.path;
 
-      // ✅ Ensure the selected file is `.nii.gz`
       if (filePath != null && filePath.endsWith(".nii.gz")) {
         setState(() {
           _file = File(filePath);
         });
       } else {
-        // Show an error if the wrong file is selected
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Please select a .nii.gz file only!")),
         );
@@ -84,7 +82,6 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
     }
   }
 
-  // ✅ Function to upload the `.nii.gz` file to AWS
   Future<void> _uploadFile() async {
     if (_file == null) return;
 
@@ -94,7 +91,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
 
     var request = http.MultipartRequest(
       "POST",
-      Uri.parse("http://your-ec2-ip:5000/predict"), // Replace with your EC2 IP
+      Uri.parse("http://your-ec2-ip:5000/predict"),
     );
 
     request.files.add(await http.MultipartFile.fromPath('file', _file!.path));
@@ -105,10 +102,53 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
       setState(() {
         _result = jsonResponse["segmentation_mask"].toString();
       });
+
+      // Show success animation
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Lottie.asset(
+                'assets/success.json',
+                height: 30,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(width: 10),
+              const Text("File uploaded successfully!"),
+            ],
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Access the DashboardState and update the total scans and report history
+      DashboardState? dashboardState = DashboardScreen.of(context);
+      if (dashboardState != null) {
+        dashboardState.incrementTotalScans();
+        dashboardState.addReportHistory(_result);
+      }
     } else {
       setState(() {
         _result = "Error: ${response.statusCode}";
       });
+
+      // Show error animation
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Lottie.asset(
+                'assets/error.json',
+                height: 30,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(width: 10),
+              const Text("File upload failed. Please try again."),
+            ],
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
 
     setState(() {
@@ -150,9 +190,9 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
                 transitionType: ContainerTransitionType.fadeThrough,
                 closedBuilder: (context, action) => GestureDetector(
                   onTap: () async {
-                    await _pickFile(); // Pick the `.nii.gz` file
+                    await _pickFile();
                     if (_file != null) {
-                      await _uploadFile(); // Upload the `.nii.gz` file
+                      await _uploadFile();
                     }
                     action();
                   },
@@ -166,7 +206,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
                   : Text("Selected file: ${_file!.path}"),
               if (isLoading)
                 Lottie.asset(
-                  'assets/loading.json', // Ensure this file exists
+                  'assets/loading.json',
                   height: 100,
                   fit: BoxFit.contain,
                 ),
@@ -193,10 +233,15 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [_colorAnimation.value!, Colors.white],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+              gradient: SweepGradient(
+                colors: [
+                  _colorAnimation.value!,
+                  Colors.white,
+                  _colorAnimation.value!
+                ],
+                stops: const [0.0, 0.5, 1.0],
+                startAngle: 0.0,
+                endAngle: 2 * 3.14,
               ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
@@ -228,7 +273,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
                     ),
                   const SizedBox(height: 12),
                   const Text(
-                    "Tap to Upload .nii.gz File",
+                    "Tap to Upload",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -323,8 +368,33 @@ class AnalysisScreen extends StatelessWidget {
   }
 }
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  DashboardState createState() => DashboardState();
+
+  // Define the `of` method to access the state
+  static DashboardState? of(BuildContext context) {
+    return context.findAncestorStateOfType<DashboardState>();
+  }
+}
+
+class DashboardState extends State<DashboardScreen> {
+  int totalScans = 0;
+  List<String> reportHistory = [];
+
+  void incrementTotalScans() {
+    setState(() {
+      totalScans++;
+    });
+  }
+
+  void addReportHistory(String result) {
+    setState(() {
+      reportHistory.add(result);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -363,32 +433,10 @@ class DashboardScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: DashboardCard(
-                    title: "Total Scans",
-                    value: "124",
-                    icon: Icons.assessment,
-                    color: Colors.blue,
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: DashboardCard(
                     title: "Detection Accuracy",
                     value: "94%",
                     icon: Icons.verified,
                     color: Colors.green,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Row(
-              children: [
-                Expanded(
-                  child: DashboardCard(
-                    title: "Recent Reports",
-                    value: "12",
-                    icon: Icons.description,
-                    color: Colors.orange,
                   ),
                 ),
                 SizedBox(width: 16),
@@ -402,15 +450,70 @@ class DashboardScreen extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      // Custom transition for ReportHistoryScreen
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 500),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  ReportHistoryScreen(
+                            reportHistory: reportHistory,
+                          ),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: DashboardCard(
+                      title: "Recent Reports",
+                      value: reportHistory.length.toString(),
+                      icon: Icons.description,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DashboardCard(
+                    title: "Total Scans",
+                    value: totalScans.toString(),
+                    icon: Icons.assessment,
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // Custom transition for CoronaryDetectionScreen
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const CoronaryDetectionScreen(),
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const CoronaryDetectionScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
             ),
           );
         },
@@ -466,6 +569,34 @@ class DashboardCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ReportHistoryScreen extends StatelessWidget {
+  final List<String> reportHistory;
+
+  const ReportHistoryScreen({super.key, required this.reportHistory});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Report History"),
+        backgroundColor: Colors.red,
+      ),
+      body: ListView.builder(
+        itemCount: reportHistory.length,
+        itemBuilder: (context, index) {
+          return Card(
+            margin: const EdgeInsets.all(8),
+            child: ListTile(
+              title: Text("Report ${index + 1}"),
+              subtitle: Text(reportHistory[index]),
+            ),
+          );
+        },
       ),
     );
   }
