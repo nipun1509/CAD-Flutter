@@ -6,10 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:animations/animations.dart';
 import 'package:lottie/lottie.dart';
 
+// Main function to run the Flutter app
 void main() {
   runApp(const CoronaryDetectionApp());
 }
 
+// Root widget for the application
 class CoronaryDetectionApp extends StatelessWidget {
   const CoronaryDetectionApp({super.key});
 
@@ -22,11 +24,12 @@ class CoronaryDetectionApp extends StatelessWidget {
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const DashboardScreen(),
+      home: const DashboardScreen(), // Set the initial screen to Dashboard
     );
   }
 }
 
+// Screen for coronary artery detection
 class CoronaryDetectionScreen extends StatefulWidget {
   const CoronaryDetectionScreen({super.key});
 
@@ -35,17 +38,19 @@ class CoronaryDetectionScreen extends StatefulWidget {
       _CoronaryDetectionScreenState();
 }
 
+// State class for CoronaryDetectionScreen
 class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
     with SingleTickerProviderStateMixin {
-  bool isLoading = false;
-  File? _file;
-  String _result = "";
-  late AnimationController _controller;
-  late Animation<Color?> _colorAnimation;
+  bool isLoading = false; // Loading state
+  File? _file; // Selected file
+  String _result = ""; // Result from the API
+  late AnimationController _controller; // Animation controller
+  late Animation<Color?> _colorAnimation; // Color animation
 
   @override
   void initState() {
     super.initState();
+    // Initialize animation controller and color animation
     _controller = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
@@ -58,10 +63,11 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller.dispose(); // Dispose animation controller
     super.dispose();
   }
 
+  // Function to pick a file using FilePicker
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.any,
@@ -70,11 +76,13 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
     if (result != null) {
       String? filePath = result.files.single.path;
 
+      // Check if the file is of type .nii.gz
       if (filePath != null && filePath.endsWith(".nii.gz")) {
         setState(() {
           _file = File(filePath);
         });
       } else {
+        // Show error if the file type is incorrect
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Please select a .nii.gz file only!")),
         );
@@ -82,16 +90,17 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
     }
   }
 
+  // Function to upload the selected file to the server
   Future<void> _uploadFile() async {
     if (_file == null) return;
 
     setState(() {
-      isLoading = true;
+      isLoading = true; // Start loading
     });
 
     var request = http.MultipartRequest(
       "POST",
-      Uri.parse("http://your-ec2-ip:5000/predict"),
+      Uri.parse("http://your-ec2-ip:5000/predict"), // API endpoint
     );
 
     request.files.add(await http.MultipartFile.fromPath('file', _file!.path));
@@ -100,7 +109,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(await response.stream.bytesToString());
       setState(() {
-        _result = jsonResponse["segmentation_mask"].toString();
+        _result = jsonResponse["segmentation_mask"].toString(); // Set result
       });
 
       // Show success animation
@@ -121,7 +130,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
         ),
       );
 
-      // Access the DashboardState and update the total scans and report history
+      // Update the dashboard state with the new scan and report
       DashboardState? dashboardState = DashboardScreen.of(context);
       if (dashboardState != null) {
         dashboardState.incrementTotalScans();
@@ -129,7 +138,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
       }
     } else {
       setState(() {
-        _result = "Error: ${response.statusCode}";
+        _result = "Error: ${response.statusCode}"; // Set error message
       });
 
       // Show error animation
@@ -152,7 +161,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
     }
 
     setState(() {
-      isLoading = false;
+      isLoading = false; // Stop loading
     });
   }
 
@@ -222,6 +231,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
     );
   }
 
+  // Widget for the upload card with animation
   Widget uploadCard(BuildContext context) {
     return AnimatedBuilder(
       animation: _colorAnimation,
@@ -286,6 +296,7 @@ class _CoronaryDetectionScreenState extends State<CoronaryDetectionScreen>
   }
 }
 
+// Screen to display analysis results
 class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({super.key});
 
@@ -368,28 +379,32 @@ class AnalysisScreen extends StatelessWidget {
   }
 }
 
+// Dashboard screen to show overall statistics
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
   DashboardState createState() => DashboardState();
 
-  // Define the `of` method to access the state
+  // Method to access the DashboardState from other widgets
   static DashboardState? of(BuildContext context) {
     return context.findAncestorStateOfType<DashboardState>();
   }
 }
 
+// State class for DashboardScreen
 class DashboardState extends State<DashboardScreen> {
-  int totalScans = 0;
-  List<String> reportHistory = [];
+  int totalScans = 0; // Total number of scans
+  List<String> reportHistory = []; // List to store report history
 
+  // Method to increment total scans
   void incrementTotalScans() {
     setState(() {
       totalScans++;
     });
   }
 
+  // Method to add a new report to the history
   void addReportHistory(String result) {
     setState(() {
       reportHistory.add(result);
@@ -456,7 +471,7 @@ class DashboardState extends State<DashboardScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      // Custom transition for ReportHistoryScreen
+                      // Navigate to ReportHistoryScreen with a custom transition
                       Navigator.push(
                         context,
                         PageRouteBuilder(
@@ -500,7 +515,7 @@ class DashboardState extends State<DashboardScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Custom transition for CoronaryDetectionScreen
+          // Navigate to CoronaryDetectionScreen with a custom transition
           Navigator.push(
             context,
             PageRouteBuilder(
@@ -524,6 +539,7 @@ class DashboardState extends State<DashboardScreen> {
   }
 }
 
+// Widget for a dashboard card
 class DashboardCard extends StatelessWidget {
   final String title;
   final String value;
@@ -574,6 +590,7 @@ class DashboardCard extends StatelessWidget {
   }
 }
 
+// Screen to display the report history
 class ReportHistoryScreen extends StatelessWidget {
   final List<String> reportHistory;
 
