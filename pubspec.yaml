@@ -14,14 +14,17 @@ dependencies:
   animations: ^2.0.2
   lottie: ^2.0.0
   file_picker: ^8.3.1
-  video_player: ^2.7.0
+  video_player: ^2.9.1  # Use the latest version
   logger: ^1.1.0
+  google_sign_in: ^6.2.1
+  shared_preferences: ^2.2.2
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  flutter_native_splash: ^2.3.2
   
 
 flutter:
@@ -38,9 +41,21 @@ flutter:
     - assets/analysis.json
     - assets/loading.json
     - assets/videos/logo.mp4
+    - assets/images/logo.png
+    - assets/logo.json
+    - assets/logo.gif
 
   fonts:
     - family: Poppins
       fonts:
         - asset: fonts/Poppins-Regular.ttf
         - asset: fonts/Poppins-Bold.ttf
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/logo.png
+  android: true
+  ios: true
+  android_gravity: center
+  fullscreen: true

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "493586467504",
+    "project_id": "heartvision-5ed5d",
+    "storage_bucket": "heartvision-5ed5d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493586467504:android:ee9f95baa05e92295a8975",
+        "android_client_info": {
+          "package_name": "com.example.flutterproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfsHRpcNYDon0orah4-Ll7ybsuEHPGCkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

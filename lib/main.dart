@@ -5,13 +5,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:animations/animations.dart';
 import 'package:lottie/lottie.dart';
+import 'splash_screen.dart'; // Already importing SplashScreen
 
-// Main function to run the Flutter app
 void main() {
   runApp(const CoronaryDetectionApp());
 }
 
-// Root widget for the application
 class CoronaryDetectionApp extends StatelessWidget {
   const CoronaryDetectionApp({super.key});
 
@@ -24,10 +23,12 @@ class CoronaryDetectionApp extends StatelessWidget {
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const DashboardScreen(), // Set the initial screen to Dashboard
+      home: const SplashScreen(), // Use SplashScreen as the entry point
     );
   }
 }
+
+// Rest of your main.dart code (CoronaryDetectionScreen, DashboardScreen, etc.) remains unchanged
 
 // Screen for coronary artery detection
 class CoronaryDetectionScreen extends StatefulWidget {
