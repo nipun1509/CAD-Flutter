@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'main.dart'; // Import main.dart to access DashboardScreen
+import 'package:learningdart/main.dart';
+import 'package:learningdart/pages/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,13 +14,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    // Navigate after 5.6 seconds
     Future.delayed(const Duration(milliseconds: 4500), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          MaterialPageRoute(
+            builder: (context) => FirebaseAuth.instance.currentUser != null
+                ? const DashboardScreen()
+                : const LoginPage(),
+          ),
         );
       }
     });

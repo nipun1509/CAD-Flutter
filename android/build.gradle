@@ -18,7 +18,21 @@ tasks.register("clean", Delete) {
 }
 
 buildscript {
-  dependencies {
-    classpath 'com.google.gms:google-services:4.4.1' // Check for the latest version
-  }
+    ext.kotlin_version = '1.9.20'
+    repositories {
+        google() // Add this if missing
+        mavenCentral() // Add this if missing
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0' // Ensure this matches your version
+        classpath 'com.google.gms:google-services:4.4.2' // Your google-services version
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google() // Add this if missing
+        mavenCentral() // Add this if missing
+    }
 }

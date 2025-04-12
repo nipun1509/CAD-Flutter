@@ -1,41 +1,35 @@
 name: learningdart
 description: A new Flutter project.
-
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.8.5+3  
-  http: ^0.13.4  
+  image_picker: ^0.8.5+3
+  http: ^1.3.0
   animations: ^2.0.2
-  lottie: ^2.0.0
+  lottie: ^3.1.2
   file_picker: ^8.3.1
-  video_player: ^2.9.1  # Use the latest version
-  logger: ^1.1.0
+  video_player: ^2.9.1
+  logger: ^2.0.2+1
   google_sign_in: ^6.2.1
-  shared_preferences: ^2.2.2
-
+  shared_preferences: ^2.3.2
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  pdf: ^3.11.0
+  path_provider: ^2.1.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
   flutter_native_splash: ^2.3.2
-  
 
 flutter:
   uses-material-design: true
-  plugin:
-    platforms:
-      android:
-        default_package: file_picker
-      ios:
-        default_package: file_picker
-
   assets:
     - assets/upload.json
     - assets/analysis.json
@@ -44,17 +38,26 @@ flutter:
     - assets/images/logo.png
     - assets/logo.json
     - assets/logo.gif
-
+    - assets/videos/heartgif.mp4
+    - assets/pdfs/report_1.pdf
+    - assets/pdfs/report_2.pdf
+    - assets/pdfs/report_3.pdf
+    - assets/pdfs/report_4.pdf
+    - assets/pdfs/report_5.pdf
+    - assets/pdfs/report_6.pdf
+    - assets/pdfs/report_7.pdf
+    - assets/pdfs/report_8.pdf
+    - assets/pdfs/report_9.pdf
+    - assets/pdfs/report_10.pdf
   fonts:
     - family: Poppins
       fonts:
         - asset: fonts/Poppins-Regular.ttf
         - asset: fonts/Poppins-Bold.ttf
 
-
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/logo.png
+  image: assets/images/logo.png
   android: true
   ios: true
   android_gravity: center

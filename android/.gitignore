@@ -11,3 +11,45 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Flutter/Dart
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/.pub-cache/
+**/.pub/
+**/build/
+**/.cxx/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/Flutter.podspec
+**/ios/Runner.xcworkspace/
+**/ios/Runner/Info.plist
+android/app/google-services.json
+lib/firebase_options.dart
+**/*.g.dart
+**/*.freezed.dart
+**/*.mocks.dart
+
+# Firebase
+firebase.json
+.firebaserc
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# IDEs
+.idea/
+.metadata
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Misc
+*.log
+*.lock
+*.env
