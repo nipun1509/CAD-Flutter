@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:learningdart/pages/profile_page.dart'; // Import ProfilePage
+//import 'package:learningdart/pages/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        automaticallyImplyLeading: false, // No back button
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -99,7 +99,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// _HomeContent, ArticlesPage, SettingsPage remain unchanged
 class _HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -125,11 +124,14 @@ class _HomeContent extends StatelessWidget {
                                 onTap: () {
                                   Navigator.pushNamed(context, '/dashboard');
                                 },
-                                child: const Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                child: Container(
+                                  height: 120, // Fixed height for consistency
+                                  padding: const EdgeInsets.all(16.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
@@ -146,8 +148,8 @@ class _HomeContent extends StatelessWidget {
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                      SizedBox(height: 20),
                                     ],
                                   ),
                                 ),
@@ -165,11 +167,14 @@ class _HomeContent extends StatelessWidget {
                                 onTap: () {
                                   Navigator.pushNamed(context, '/heart_bpm');
                                 },
-                                child: const Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                child: Container(
+                                  height: 120, // Fixed height for consistency
+                                  padding: const EdgeInsets.all(16.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
@@ -186,8 +191,8 @@ class _HomeContent extends StatelessWidget {
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                      SizedBox(height: 20),
                                     ],
                                   ),
                                 ),
