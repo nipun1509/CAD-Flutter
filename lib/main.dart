@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:learningdart/firebase_options.dart';
-import 'package:learningdart/pages/login_page.dart';
+import 'package:learningdart/pages/login_page.dart'; // Confirmed existing
+import 'package:learningdart/pages/home_page.dart'; // Confirmed existing
 import 'package:learningdart/controllers/user_controller.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
-import 'splash_screen.dart';
+import 'splash_screen.dart'; // Confirmed existing
 import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:learningdart/pages/heart_bpm_page.dart'; // Confirmed existing
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,12 +29,20 @@ class CoronaryDetectionApp extends StatelessWidget {
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const SplashScreen(),
+      initialRoute: '/splash',
+      routes: {
+        '/splash': (context) => const SplashScreen(),
+        '/login': (context) =>
+            const LoginPage(), // Non-const due to VideoPlayerController
+        '/home': (context) => const HomePage(),
+        '/heart_bpm': (context) => const HeartBPMPage(),
+        '/dashboard': (context) => const DashboardScreen(), // Placeholder
+      },
     );
   }
 }
 
-// Mock Report Data Model
+// Mock Report Data Model (keeping for future use, though not currently needed)
 class CACReport {
   final int index;
   final int totalLesionArea;
@@ -53,7 +63,7 @@ class CACReport {
   });
 }
 
-// Mock API with 10 predefined reports
+// Mock API with 10 predefined reports (keeping for future use)
 class MockCACApi {
   static final List<CACReport> _reports = [
     CACReport(
@@ -142,7 +152,10 @@ class MockCACApi {
     return _reports[Random().nextInt(_reports.length)];
   }
 }
+// Rest of your code (CoronaryDetectionScreen, AnalysisScreen, DashboardScreen, DashboardCard, ReportHistoryScreen) remains unchanged
+// ... (include the rest of the file as provided earlier)
 
+// Rest of your code (CoronaryDetectionScreen, AnalysisScreen, DashboardScreen, DashboardCard, ReportHistoryScreen) remains unchanged
 class CoronaryDetectionScreen extends StatefulWidget {
   const CoronaryDetectionScreen({super.key});
 
@@ -485,19 +498,13 @@ class DashboardState extends State<DashboardScreen> {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Row(
-          children: [
-            Icon(Icons.favorite, color: Colors.red),
-            SizedBox(width: 8),
-            Text(
-              "HeartVision",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                fontFamily: 'Poppins',
-              ),
-            ),
-          ],
+        title: const Text(
+          "Coronary Artery Detection",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
         ),
         actions: [
           IconButton(

@@ -49,6 +49,8 @@ flutter:
     - assets/pdfs/report_8.pdf
     - assets/pdfs/report_9.pdf
     - assets/pdfs/report_10.pdf
+    - assets/images/heartcheckup.jpg
+    
   fonts:
     - family: Poppins
       fonts:

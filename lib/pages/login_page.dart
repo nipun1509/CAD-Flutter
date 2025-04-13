@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:learningdart/controllers/user_controller.dart';
-import 'package:learningdart/main.dart';
 import 'package:video_player/video_player.dart';
+import 'package:learningdart/pages/home_page.dart'; // Import the correct HomePage
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -45,11 +45,11 @@ class _LoginPageState extends State<LoginPage> {
               offset: const Offset(0, -30),
               child: _controller.value.isInitialized
                   ? ClipRect(
-                      child: Container(
+                      child: SizedBox(
                         width: 220,
                         height: 220,
                         child: Transform.scale(
-                          scale: 1.5, // Zooms in on the center
+                          scale: 1.5,
                           child: AspectRatio(
                             aspectRatio: _controller.value.aspectRatio,
                             child: VideoPlayer(_controller),
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (user != null && mounted) {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => const DashboardScreen(),
+                          builder: (context) => const HomePage(),
                         ),
                       );
                     }
