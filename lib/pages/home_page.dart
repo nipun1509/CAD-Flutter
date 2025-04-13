@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:learningdart/pages/profile_page.dart'; // Import ProfilePage
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,9 +12,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  // Navigation pages (removed const to allow non-const widgets)
   static final List<Widget> _pages = <Widget>[
-    _HomeContent(), // Use a separate widget for Home content
+    _HomeContent(),
     const ArticlesPage(),
     const SettingsPage(),
   ];
@@ -27,14 +27,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
-    final String displayName =
-        user?.displayName ?? 'Nipun Sahoo'; // Default to 'Nipun Sahoo'
+    final String displayName = user?.displayName ?? user?.email ?? 'Guest';
 
     return Scaffold(
-      backgroundColor: Colors.white, // Set background to white to match image
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        automaticallyImplyLeading: false, // No back button
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                   child: IconButton(
                     icon: const Icon(Icons.person, color: Colors.red),
                     onPressed: () {
-                      // Handle profile tap
+                      Navigator.pushNamed(context, '/profile');
                     },
                   ),
                 ),
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: _pages[_selectedIndex], // Display the selected page
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Separate widget for Home content to avoid recursion
+// _HomeContent, ArticlesPage, SettingsPage remain unchanged
 class _HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -220,7 +220,6 @@ class _HomeContent extends StatelessWidget {
   }
 }
 
-// Empty ArticlesPage
 class ArticlesPage extends StatelessWidget {
   const ArticlesPage({super.key});
 
@@ -233,7 +232,6 @@ class ArticlesPage extends StatelessWidget {
   }
 }
 
-// Empty SettingsPage
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
