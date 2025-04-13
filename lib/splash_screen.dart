@@ -1,27 +1,33 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:learningdart/pages/login_page.dart'; // Import LoginPage only
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToHome();
+    _navigateToNextPage();
   }
 
-  Future<void> _navigateToHome() async {
+  Future<void> _navigateToNextPage() async {
     await Future.delayed(
         const Duration(milliseconds: 4500)); // 4.5-second delay
     if (mounted) {
-      Navigator.pushReplacementNamed(
-          context, '/home'); // Navigate to home directly
+      // Check if a user is logged in
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // User is logged in, go to home
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        // No user, go to login
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     }
   }
 

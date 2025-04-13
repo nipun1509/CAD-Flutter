@@ -10,6 +10,7 @@ import 'splash_screen.dart'; // Confirmed existing
 import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:learningdart/pages/heart_bpm_page.dart'; // Confirmed existing
+import 'package:learningdart/pages/profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ class CoronaryDetectionApp extends StatelessWidget {
         '/home': (context) => const HomePage(),
         '/heart_bpm': (context) => const HeartBPMPage(),
         '/dashboard': (context) => const DashboardScreen(), // Placeholder
+        '/profile': (context) => const ProfilePage(),
       },
     );
   }
@@ -506,21 +508,6 @@ class DashboardState extends State<DashboardScreen> {
             fontFamily: 'Poppins',
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.red),
-            onPressed: () async {
-              await UserController.signOut();
-              if (mounted) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
         elevation: 2,
       ),
       body: Padding(
