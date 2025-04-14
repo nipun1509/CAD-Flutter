@@ -1,7 +1,7 @@
-# flutterproject
+# HeartVision
 
 
-A new Flutter project.
+AI-Powered Coronary Artery Calcification Detection App
 
 ## Getting Started
 
