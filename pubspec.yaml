@@ -21,6 +21,9 @@ dependencies:
   firebase_auth: ^5.3.1
   pdf: ^3.11.0
   path_provider: ^2.1.4
+  share_plus: ^10.0.3  # For sharing results
+  url_launcher: ^6.3.1
+  
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +53,14 @@ flutter:
     - assets/pdfs/report_9.pdf
     - assets/pdfs/report_10.pdf
     - assets/images/heartcheckup.jpg
+    - assets/heartbeat.json
+    - assets/images/coronary.png
+    - assets/images/heart_bpm.jpeg
+    - assets/images/coronary_article.jpg
+    - assets/images/heart_rate_article.jpg
+    - assets/images/lifestyle_article.jpg
+    - assets/images/detection_article.jpg
+    - assets/images/stress_article.jpg
     
   fonts:
     - family: Poppins
