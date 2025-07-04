@@ -60,4 +60,4 @@ Optimized login UI and Android configs.
 
 *Screenshots*
 
-To be added
+![Project Screenshot](C:\Users\asus\Downloads\heartv1photo) ![Project Screenshot](C:\Users\asus\Downloads\heartv1photo)
