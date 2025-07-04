@@ -60,4 +60,8 @@ Optimized login UI and Android configs.
 
 *Screenshots*
 
-![Project Screenshot](assets/images/heartv0photo.jpg) ![Project Screenshot](assets/images/heartv1photo.jpg)
+<p align="center">
+  <img src="assets/images/heartv0photo.jpg" alt="Image 1" width="300"/>
+  <img src="assets/images/heartv1photo.jpg" alt="Image 2" width="300"/>
+</p>
+
